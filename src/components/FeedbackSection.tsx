@@ -1,7 +1,7 @@
 import Button from "./Button/Button";
 import { useState, useEffect, SyntheticEvent } from "react";
 import { ways } from "../data";
-import useInput from "../hooks/userinput";
+import useInput from "../hooks/useInput";
 
 interface TouchedState {
   name: boolean;
@@ -46,8 +46,8 @@ export default function FeedbackSection() {
   function handleSubmit(e: SyntheticEvent) {
     e.preventDefault();
 
-    if (!name.value.trim() || !phone.value.trim()) {
-      alert("Заполните имя и телефон");
+    if (!isValid) {
+      setTouched({ name: true, phone: true });
       return;
     }
 
@@ -55,6 +55,7 @@ export default function FeedbackSection() {
     name.setValue("");
     phone.setValue("");
     setServiceId(ways[0].id);
+    setTouched({ name: false, phone: false });
   }
 
   if (submitted) {

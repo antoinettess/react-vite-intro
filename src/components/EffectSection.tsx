@@ -1,8 +1,8 @@
-import { reviews as initialReviews, Review } from "../data";
+import { reviews as initialReviews, Review, reviews } from "../data";
 import React, { SyntheticEvent, useState } from "react";
 import Button from "./Button/Button";
 import Modal from "./Modal/Modal";
-import useInput from "../hooks/userinput";
+import useInput from "../hooks/useInput";
 
 export default function EffectSection() {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -24,7 +24,7 @@ export default function EffectSection() {
       rating,
       text: text.value,
     };
-    setLocalReviews([newReview, ...localReviews]);
+    setLocalReviews((reviews) => [newReview, ...reviews]);
     setModalOpen(false);
     name.setValue("");
     text.setValue("");
