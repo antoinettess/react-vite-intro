@@ -10,15 +10,13 @@ export default function Button({
   children,
   onClick,
   isActive,
-  type,
+  type = "button",
+  className,
   ...props
 }: ButtonProps) {
+  const clases = `button ${isActive ? "active" : ""} ${className || ""}`;
   return (
-    <button
-      onClick={onClick}
-      {...props}
-      className={`button ${isActive ? "active" : ""}`}
-    >
+    <button type={type} onClick={onClick} {...props} className={clases}>
       {children}
     </button>
   );
