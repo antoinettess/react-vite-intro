@@ -1,16 +1,20 @@
-import { reviews as initialReviews, Review } from "../data";
+import { reviews as initialReviews, Review, reviews } from "../data";
 import React, { SyntheticEvent, useState } from "react";
 import Button from "./Button/Button";
 import Modal from "./Modal/Modal";
-import useInput from "../hooks/userinput";
+import useInput from "../hooks/useInput";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { addReview, removeReview } from "../store/reviewsSlice";
 
 export default function EffectSection() {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [rating, setRating] = useState<number>(5);
-  const [localReviews, setLocalReviews] = useState<Review[]>(initialReviews);
 
   const name = useInput("");
   const text = useInput("");
+
+  const dispatch = useAppDispatch();
+  const reviews = useAppSelector((state) => state.reviews.reviews);
 
   function handleSubmit(e: SyntheticEvent) {
     e.preventDefault();
@@ -18,17 +22,18 @@ export default function EffectSection() {
       alert("Заполните имя и текст");
       return;
     }
-    const newReview: Review = {
-      id: Date.now(),
-      name: name.value,
-      rating,
-      text: text.value,
-    };
-    setLocalReviews([newReview, ...localReviews]);
-    setModalOpen(false);
+    dispatch(
+      addReview({
+        id: Date.now(),
+        name: name.value,
+        rating,
+        text: text.value,
+      }),
+    );
     name.setValue("");
     text.setValue("");
     setRating(5);
+    setModalOpen(false);
   }
 
   return (
@@ -46,7 +51,7 @@ export default function EffectSection() {
       </div>
 
       <ul style={{ listStyle: "none", padding: 0 }}>
-        {localReviews.map((r) => (
+        {reviews.map((r) => (
           <li
             key={r.id}
             style={{
@@ -61,6 +66,9 @@ export default function EffectSection() {
               <span>{"⭐".repeat(r.rating)}</span>
             </div>
             <p style={{ marginTop: "10px", color: "#666" }}>{r.text}</p>
+            <button onClick={() => dispatch(removeReview(r.id))}>
+              Удалить
+            </button>
           </li>
         ))}
       </ul>

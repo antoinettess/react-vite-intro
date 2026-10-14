@@ -14,7 +14,7 @@ export default function App() {
   const [tab, setTab] = useState<Tab>("main");
 
   return (
-    <div className="'App">
+    <div className="App">
       <Header />
       <main>
         <IntroSection />
